@@ -8,4 +8,6 @@ add_executable(Run)
 target_sources(
     Run PRIVATE
     Main.cpp
+    Log.cpp
+    Log.hpp
 )

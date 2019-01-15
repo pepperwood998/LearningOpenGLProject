@@ -3,4 +3,9 @@ project(
     LearningProject 
     VERSION 1.0.0
     DESCRIPTION "OpenGL Learning with Git")
-    
+
+add_executable(Run)
+target_sources(
+    Run PRIVATE
+    Main.cpp
+)

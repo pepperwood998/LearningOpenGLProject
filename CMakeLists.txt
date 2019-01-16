@@ -13,6 +13,8 @@ target_sources(
     Main.cpp
     Log.cpp
     Log.hpp
+    Shader.hpp
+    Shader.cpp
     glad.c
 )
 target_include_directories(

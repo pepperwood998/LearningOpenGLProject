@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Log.hpp"
 
@@ -25,10 +26,21 @@ int main(int argc, char const *argv[])
     }
     glfwMakeContextCurrent(window);
 
+    // GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        glfwTerminate();
+        unnamed::Log("ERROR::GLAD::INIT", "OpenGL function pointers load failed");
+        return -1;
+    }
+
     // Game Loop
     while (!glfwWindowShouldClose(window))
     {
         ProcessInput(window);
+
+        glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

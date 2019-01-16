@@ -13,6 +13,11 @@ target_sources(
     Main.cpp
     Log.cpp
     Log.hpp
+    glad.c
+)
+target_include_directories(
+    Run PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib"
 )
 target_link_libraries(
     Run PRIVATE

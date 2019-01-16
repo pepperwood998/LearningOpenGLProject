@@ -9,6 +9,9 @@ const char *title = "Learning OpenGL Project";
 // process inputs coming to "window"
 void ProcessInput(GLFWwindow *window);
 
+// Event Callback
+void cb_FramebufferSize(GLFWwindow *window, int width, int height);
+
 int main(int argc, char const *argv[])
 {
     // GLFW
@@ -33,6 +36,7 @@ int main(int argc, char const *argv[])
         unnamed::Log("ERROR::GLAD::INIT", "OpenGL function pointers load failed");
         return -1;
     }
+    glfwSetFramebufferSizeCallback(window, cb_FramebufferSize);
 
     // Game Loop
     while (!glfwWindowShouldClose(window))
@@ -56,4 +60,9 @@ void ProcessInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
+}
+
+void cb_FramebufferSize(GLFWwindow *window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }

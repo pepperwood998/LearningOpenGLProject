@@ -25,3 +25,12 @@ target_link_libraries(
     Run PRIVATE
     glfw
 )
+
+if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
+    add_custom_command(
+        TARGET Run POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/res" "$<TARGET_FILE_DIR:Run>/res"
+    )
+endif()
+

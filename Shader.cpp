@@ -34,8 +34,8 @@ Shader::Shader(const char *vertex_path, const char *fragment_path)
         unnamed::Log("ERROR::SHADER::FILE", "Shader file read failed");
     }
 
-    GLuint vert_shader = CompileShader(GL_VERTEX_SHADER, vert_src.c_str);
-    GLuint frag_shader = CompileShader(GL_FRAGMENT_SHADER, frag_src.c_str);
+    GLuint vert_shader = CompileShader(GL_VERTEX_SHADER, vert_src.c_str());
+    GLuint frag_shader = CompileShader(GL_FRAGMENT_SHADER, frag_src.c_str());
     _ID = LinkShaders(vert_shader, frag_shader);
 }
 

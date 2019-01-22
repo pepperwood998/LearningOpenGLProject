@@ -6,6 +6,6 @@ out vec3 stage_col;
 
 void main()
 {
-    gl_Color = vec4(pos, 1.0);
+    gl_Position = vec4(pos, 1.0);
     stage_col = col;
 }

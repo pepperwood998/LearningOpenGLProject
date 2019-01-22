@@ -5,5 +5,5 @@ out vec4 final_col;
 
 void main()
 {
-    final_col = (stage_col, 1.0);
+    final_col = vec4(stage_col, 1.0);
 }

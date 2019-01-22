@@ -8,12 +8,12 @@ const int HEIGHT = 600;
 const char *title = "Learning OpenGL Project";
 
 // process inputs coming to "window"
-void ProcessInput(GLFWwindow *window);
+void ProcessInput (GLFWwindow *window);
 
 // Event Callback
-void cb_FramebufferSize(GLFWwindow *window, int width, int height);
+void cb_FramebufferSize (GLFWwindow *window, int width, int height);
 
-int main(int argc, char const *argv[])
+int main (int argc, char const *argv[])
 {
     // GLFW
     glfwInit();
@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void ProcessInput(GLFWwindow *window)
+void ProcessInput (GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -97,7 +97,7 @@ void ProcessInput(GLFWwindow *window)
     }
 }
 
-void cb_FramebufferSize(GLFWwindow *window, int width, int height)
+void cb_FramebufferSize (GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }

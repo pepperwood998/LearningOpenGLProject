@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-Shader::Shader(const char *vertex_path, const char *fragment_path)
+Shader::Shader (const char *vertex_path, const char *fragment_path)
 {
     std::ifstream vert_file;
     std::ifstream frag_file;
@@ -39,12 +39,12 @@ Shader::Shader(const char *vertex_path, const char *fragment_path)
     _ID = LinkShaders(vert_shader, frag_shader);
 }
 
-void Shader::Use()
+void Shader::Use ()
 {
     glUseProgram(_ID);
 }
 
-GLuint Shader::CompileShader(GLenum shader_type, const char *shader_src)
+GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
 {
     GLuint shader;
     shader = glCreateShader(shader_type);
@@ -64,7 +64,7 @@ GLuint Shader::CompileShader(GLenum shader_type, const char *shader_src)
     return shader;
 }
 
-GLuint Shader::LinkShaders(GLuint vertex_shader, GLuint fragment_shader)
+GLuint Shader::LinkShaders (GLuint vertex_shader, GLuint fragment_shader)
 {
     GLuint program;
     program = glCreateProgram();

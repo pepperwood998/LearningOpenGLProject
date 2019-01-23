@@ -44,6 +44,11 @@ void Shader::Use ()
     glUseProgram(_ID);
 }
 
+void Shader::SetMat4 (const char *name, glm::mat4 value)
+{
+    glUniformMatrix4fv(glGetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value));
+}
+
 GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
 {
     GLuint shader;

@@ -1,5 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "Log.hpp"
 #include "Shader.hpp"
 
@@ -41,14 +43,53 @@ int main (int argc, char const *argv[])
         return -1;
     }
     glfwSetFramebufferSizeCallback(window, cb_FramebufferSize);
+    glEnable(GL_DEPTH_TEST);
 
     Shader shader("res/shader/shader.vs", "res/shader/shader.fs");
     // Vertices data
     float vertices[] = 
-    {   // Position             // Color            // Tex-coord
-        -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,       0.0f, 0.0f, 1.0f,   0.5f, 1.0f
+    {   // Position           // Tex-coord
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,   1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,   1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,   0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,   0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,   1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
     GLuint VBO;
@@ -60,12 +101,10 @@ int main (int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -97,19 +136,32 @@ int main (int argc, char const *argv[])
     }
     stbi_image_free(data);
 
+    // One-time-set Variables
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+
+    shader.Use();
+    shader.SetMat4("model", model);
+    shader.SetMat4("view", view);
+    shader.SetMat4("projection", projection);
+
     // Game Loop
     while (!glfwWindowShouldClose(window))
     {
         ProcessInput(window);
 
         glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         shader.Use();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

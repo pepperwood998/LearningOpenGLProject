@@ -18,6 +18,9 @@ void ProcessInput (GLFWwindow *window);
 // Event Callback
 void cb_FramebufferSize (GLFWwindow *window, int width, int height);
 
+// GLM lookAt, my version
+glm::mat4 MyLookAt(const glm::vec3 &camera_pos, const glm::vec3 &camera_target, const glm::vec3 &up);
+
 int main (int argc, char const *argv[])
 {
     // GLFW
@@ -138,11 +141,14 @@ int main (int argc, char const *argv[])
 
     // One-time-set Variables
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
     model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+
+    // View-matrix from configurable camera
+    glm::vec3 camera_pos    = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 camera_target = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::mat4 view = MyLookAt(camera_pos, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
 
     shader.Use();
     shader.SetMat4("model", model);
@@ -186,4 +192,32 @@ void ProcessInput (GLFWwindow *window)
 void cb_FramebufferSize (GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+glm::mat4 MyLookAt(const glm::vec3 &camera_pos, const glm::vec3 &camera_target, const glm::vec3 &up)
+{
+    glm::mat4 view;
+
+    glm::vec3 camera_z = glm::normalize(camera_pos - camera_target);
+    // Camera-Right-axis
+    glm::vec3 camera_right = glm::normalize(glm::cross(up, camera_z));
+    // Camera-Up-axis
+    glm::vec3 camera_up = glm::normalize(glm::cross(camera_z, camera_right));
+
+    glm::mat4 translation = glm::mat4(1.0f);
+    translation = glm::translate(translation, glm::vec3(0.0f) - camera_pos);
+    glm::mat4 rotation = glm::mat4(1.0f);
+    rotation[0][0] = camera_right.x;
+    rotation[0][1] = camera_right.y;
+    rotation[0][2] = camera_right.z;
+    rotation[1][0] = camera_up.x;
+    rotation[1][1] = camera_up.y;
+    rotation[1][2] = camera_up.z;
+    rotation[2][0] = camera_z.x;
+    rotation[2][1] = camera_z.y;
+    rotation[2][2] = camera_z.z;
+
+    view = rotation * translation;
+
+    return view;
 }

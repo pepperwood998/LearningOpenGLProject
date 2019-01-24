@@ -27,7 +27,12 @@ target_link_libraries(
 )
 
 install(
+    TARGETS Run
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/bin/"
+)
+
+install(
     DIRECTORY res/
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/res"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/bin/res"
 )
 

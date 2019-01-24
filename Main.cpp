@@ -12,6 +12,11 @@ const int WIDTH = 800;
 const int HEIGHT = 600;
 const char *title = "Learning OpenGL Project";
 
+glm::vec3 camera_pos   = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 up           = glm::vec3(0.0f, 1.0f, 0.0f);
+float num_speed        = 0.001f;
+
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
 
@@ -146,13 +151,10 @@ int main (int argc, char const *argv[])
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
     // View-matrix from configurable camera
-    glm::vec3 camera_pos    = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 camera_target = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 view = MyLookAt(camera_pos, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 view = glm::mat4(1.0f);
 
     shader.Use();
     shader.SetMat4("model", model);
-    shader.SetMat4("view", view);
     shader.SetMat4("projection", projection);
 
     // Game Loop
@@ -166,7 +168,10 @@ int main (int argc, char const *argv[])
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
 
+        view = MyLookAt(camera_pos, camera_pos + camera_front, up);
+
         shader.Use();
+        shader.SetMat4("view", view);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
@@ -186,6 +191,24 @@ void ProcessInput (GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    } else
+    {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            camera_pos += camera_front * num_speed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            camera_pos -= camera_front * num_speed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            camera_pos -= glm::normalize(glm::cross(camera_front, up)) * num_speed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            camera_pos += glm::normalize(glm::cross(camera_front, up)) * num_speed;
+        }
     }
 }
 

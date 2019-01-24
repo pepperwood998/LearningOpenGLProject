@@ -17,8 +17,17 @@ glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 up           = glm::vec3(0.0f, 1.0f, 0.0f);
 float num_speed        = 0.001f;
 
+float mouse_last_x      = WIDTH / 2;
+float mouse_last_y      = HEIGHT / 2;
+float mouse_sensitivity = 0.1f;
+float pitch             = 0.0f;
+float yaw               = 0.0f;
+
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
+
+// Mouse movement callback
+void cb_MouseMove(GLFWwindow *window, double pos_x, double pos_y);
 
 // Event Callback
 void cb_FramebufferSize (GLFWwindow *window, int width, int height);
@@ -42,6 +51,8 @@ int main (int argc, char const *argv[])
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, cb_MouseMove);
 
     // GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -212,6 +223,35 @@ void ProcessInput (GLFWwindow *window)
     }
 }
 
+void cb_MouseMove(GLFWwindow *window, double pos_x, double pos_y)
+{
+    float offset_x = pos_x - mouse_last_x;
+    float offset_y = mouse_last_y - pos_y;
+
+    mouse_last_x = pos_x;
+    mouse_last_y = pos_y;
+
+    offset_x *= mouse_sensitivity;
+    offset_y *= mouse_sensitivity;
+
+    pitch += offset_y;
+    yaw += offset_x;
+
+    if (pitch > 89.0f)
+    {
+        pitch = 89.0f;
+    } else if (pitch < -89.0f)
+    {
+        pitch = -89.0f;
+    }
+
+    glm::vec3 front = glm::vec3(0.0f);
+    front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    front.y = sin(glm::radians(pitch));
+    front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    camera_front = glm::normalize(front);
+}
+
 void cb_FramebufferSize (GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -229,15 +269,16 @@ glm::mat4 MyLookAt(const glm::vec3 &camera_pos, const glm::vec3 &camera_target, 
 
     glm::mat4 translation = glm::mat4(1.0f);
     translation = glm::translate(translation, glm::vec3(0.0f) - camera_pos);
+
     glm::mat4 rotation = glm::mat4(1.0f);
     rotation[0][0] = camera_right.x;
-    rotation[0][1] = camera_right.y;
-    rotation[0][2] = camera_right.z;
-    rotation[1][0] = camera_up.x;
+    rotation[1][0] = camera_right.y;
+    rotation[2][0] = camera_right.z;
+    rotation[0][1] = camera_up.x;
     rotation[1][1] = camera_up.y;
-    rotation[1][2] = camera_up.z;
-    rotation[2][0] = camera_z.x;
-    rotation[2][1] = camera_z.y;
+    rotation[2][1] = camera_up.z;
+    rotation[0][2] = camera_z.x;
+    rotation[1][2] = camera_z.y;
     rotation[2][2] = camera_z.z;
 
     view = rotation * translation;

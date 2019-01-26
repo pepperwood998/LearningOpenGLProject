@@ -14,9 +14,12 @@ const int WIDTH   = 800;
 const int HEIGHT  = 600;
 const char *title = "Learning OpenGL Project";
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), 0.005f);
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), 2.5f);
 float mouse_last_x = WIDTH / 2;
 float mouse_last_y = HEIGHT / 2;
+float is_focused   = false;
+float delta_time      = 0.0f;
+float last_frame_time = 0.0f;
 
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
@@ -161,6 +164,10 @@ int main (int argc, char const *argv[])
     // Game Loop
     while (!glfwWindowShouldClose(window))
     {
+        float current_frame_time = glfwGetTime();
+        delta_time = current_frame_time - last_frame_time;
+        last_frame_time = current_frame_time;
+
         ProcessInput(window);
 
         glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
@@ -196,25 +203,32 @@ void ProcessInput (GLFWwindow *window)
     {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            camera.Move(CameraDirection::FORWARD);
+            camera.Move(CameraDirection::FORWARD, delta_time);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            camera.Move(CameraDirection::BACKWARD);
+            camera.Move(CameraDirection::BACKWARD, delta_time);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            camera.Move(CameraDirection::LEFT);
+            camera.Move(CameraDirection::LEFT, delta_time);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            camera.Move(CameraDirection::RIGHT);
+            camera.Move(CameraDirection::RIGHT, delta_time);
         }
     }
 }
 
 void cb_MouseMove (GLFWwindow *window, double pos_x, double pos_y)
 {
+    if (!is_focused)
+    {
+        is_focused = true;
+        mouse_last_x = pos_x;
+        mouse_last_y = pos_y;
+    }
+
     float offset_x = pos_x - mouse_last_x;
     float offset_y = mouse_last_y - pos_y;
 

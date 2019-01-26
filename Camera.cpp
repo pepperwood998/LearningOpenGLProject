@@ -31,21 +31,23 @@ void Camera::UpdateCameraVectors ()
     _right = glm::normalize(glm::cross(_front, _world_up));
 }
 
-void Camera::Move (CameraDirection camera_dir)
+void Camera::Move (CameraDirection camera_dir, float delta_time)
 {
+    float frame_speed = _speed * delta_time;
+
     switch (camera_dir)
     {
         case CameraDirection::FORWARD:
-            _position += _front * _speed;
+            _position += _front * frame_speed;
             break;
         case CameraDirection::BACKWARD:
-            _position -= _front * _speed;
+            _position -= _front * frame_speed;
             break;
         case CameraDirection::LEFT:
-            _position -= _right * _speed;
+            _position -= _right * frame_speed;
             break;
         case CameraDirection::RIGHT:
-            _position += _right * _speed;
+            _position += _right * frame_speed;
             break;
         default:
             break;

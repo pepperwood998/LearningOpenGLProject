@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Log.hpp"
 #include "Shader.hpp"
@@ -9,13 +10,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
+const int WIDTH   = 800;
+const int HEIGHT  = 600;
 const char *title = "Learning OpenGL Project";
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), 0.005f);
-float mouse_last_x      = WIDTH / 2;
-float mouse_last_y      = HEIGHT / 2;
+float mouse_last_x = WIDTH / 2;
+float mouse_last_y = HEIGHT / 2;
 
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
@@ -147,13 +148,11 @@ int main (int argc, char const *argv[])
     stbi_image_free(data);
 
     // One-time-set Variables
-    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 model      = glm::mat4(1.0f);
+    glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+    model      = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-
-    // View-matrix from configurable camera
-    glm::mat4 view = glm::mat4(1.0f);
 
     shader.Use();
     shader.SetMat4("model", model);
@@ -214,7 +213,7 @@ void ProcessInput (GLFWwindow *window)
     }
 }
 
-void cb_MouseMove(GLFWwindow *window, double pos_x, double pos_y)
+void cb_MouseMove (GLFWwindow *window, double pos_x, double pos_y)
 {
     float offset_x = pos_x - mouse_last_x;
     float offset_y = mouse_last_y - pos_y;

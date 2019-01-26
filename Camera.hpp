@@ -22,18 +22,18 @@ private:
     float _sens;
 
 public:
-    Camera(
+    Camera (
         glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
-        float speed = 2.5f,
-        float sens = 0.1f,
+        float speed        = 2.5f,
+        float sens         = 0.1f,
         glm::vec3 front    = glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f));
-    ~Camera();
+    ~Camera ();
 
-    glm::mat4 GetViewMatrix();
+    glm::mat4 GetViewMatrix ();
     void UpdateCameraVectors();
-    void Move(CameraDirection camera_dir);
-    void Look(float offset_x, float offset_y);
+    void Move (CameraDirection camera_dir);
+    void Look (float offset_x, float offset_y);
 };
 
 #endif // __CAMERA_HPP__

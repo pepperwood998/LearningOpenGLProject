@@ -1,0 +1,39 @@
+#ifndef __CAMERA_HPP__
+#define __CAMERA_HPP__
+#include <glm/gtc/type_ptr.hpp>
+
+enum CameraDirection
+{
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT
+};
+
+class Camera
+{
+private:
+    glm::vec3 _position;
+    glm::vec3 _front;
+    glm::vec3 _world_up;
+    glm::vec3 _right;
+
+    float _speed;
+    float _sens;
+
+public:
+    Camera(
+        glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
+        float speed = 2.5f,
+        float sens = 0.1f,
+        glm::vec3 front    = glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f));
+    ~Camera();
+
+    glm::mat4 GetViewMatrix();
+    void UpdateCameraVectors();
+    void Move(CameraDirection camera_dir);
+    void Look(float offset_x, float offset_y);
+};
+
+#endif // __CAMERA_HPP__

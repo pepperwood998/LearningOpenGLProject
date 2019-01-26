@@ -15,6 +15,8 @@ target_sources(
     Log.hpp
     Shader.hpp
     Shader.cpp
+    Camera.hpp
+    Camera.cpp
     glad.c
 )
 target_include_directories(

@@ -2,7 +2,7 @@
 #define __CAMERA_HPP__
 #include <glm/gtc/type_ptr.hpp>
 
-enum CameraDirection
+enum class CameraDirection
 {
     FORWARD,
     BACKWARD,

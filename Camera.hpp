@@ -33,6 +33,7 @@ public:
     ~Camera ();
 
     glm::mat4 GetViewMatrix ();
+    glm::vec3 GetPos();
 
     void Move (CameraDirection camera_dir, float delta_time);
     void Look (float offset_x, float offset_y);

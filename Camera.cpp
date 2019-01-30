@@ -20,6 +20,11 @@ glm::mat4 Camera::GetViewMatrix ()
     return view;
 }
 
+glm::vec3 Camera::GetPos ()
+{
+    return _position;
+}
+
 void Camera::UpdateCameraVectors ()
 {
     glm::vec3 front = glm::vec3(0.0f);

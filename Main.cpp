@@ -68,47 +68,48 @@ int main (int argc, char const *argv[])
     // --------------------
     float vertices[] = 
     {
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-        -0.5f,  0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
+        // Position            // Normal-vector position
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
 
-        -0.5f, -0.5f,  0.5f, 
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f, 
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f
     };
 
     // The object
@@ -121,15 +122,17 @@ int main (int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Light object
     GLuint VAO_light;
     glGenVertexArrays(1, &VAO_light);
 
     glBindVertexArray(VAO_light);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBindVertexArray(0);
@@ -144,15 +147,20 @@ int main (int argc, char const *argv[])
 
     glm::vec3 object_col = glm::vec3(1.0f, 0.5f, 0.31f);
     glm::vec3 light_col  = glm::vec3(1.0f);
-
+    
+    glm::vec3 light_pos   = glm::vec3(0.5f, 0.0f, 1.5f);
     glm::mat4 light_model = glm::mat4(1.0f);
-    light_model = glm::translate(light_model, glm::vec3(0.5f, 0.0f, 1.5f));
+    light_model = glm::translate(light_model, light_pos);
     light_model = glm::scale(light_model, glm::vec3(0.2f));
 
     shader.Use();
     shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
-    shader.SetVec3("object_col", object_col);
+    shader.SetVec3("material.ambient",  glm::vec3(1.0f, 0.5f, 0.31f));
+    shader.SetVec3("material.diffuse",  glm::vec3(1.0f, 0.5f, 0.31f));
+    shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    shader.SetFloat("material.shininess", 32.0f);
+    shader.SetVec3("light_pos", light_pos);
     shader.SetVec3("light_col", light_col);
 
     shader_light.Use();
@@ -177,6 +185,7 @@ int main (int argc, char const *argv[])
 
         shader.Use();
         shader.SetMat4("view", view);
+        shader.SetVec3("view_pos", camera.GetPos());
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glBindVertexArray(VAO_light);

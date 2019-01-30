@@ -14,6 +14,7 @@ private:
 public:
     Shader (const char *vertex_path, const char *fragment_path);
     void Use ();
+    void SetFloat (const char *name, const float value);
     void SetVec3 (const char *name, glm::vec3 value);
     void SetMat4 (const char *name, glm::mat4 value);
 };

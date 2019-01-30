@@ -1,10 +1,10 @@
 #version 330 core
-in vec2 stage_tex_coord;
-
 out vec4 final_col;
-uniform sampler2D tex;
+
+uniform vec3 object_col;
+uniform vec3 light_col;
 
 void main()
 {
-    final_col = texture(tex, stage_tex_coord);
+    final_col = vec4(object_col * light_col, 1.0);
 }

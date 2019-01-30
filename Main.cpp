@@ -62,54 +62,56 @@ int main (int argc, char const *argv[])
     glEnable(GL_DEPTH_TEST);
 
     Shader shader("res/shader/shader.vs", "res/shader/shader.fs");
+    Shader shader_light("res/shader/shader_light.vs", "res/shader/shader_light.fs");
 
     // Vertices data
     // --------------------
     float vertices[] = 
-    {   // Position           // Tex-coord
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,   1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    {
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,   1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,   1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
 
-        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,   0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,   0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,   1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f, -0.5f, 
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,   1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,   1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f,
     };
 
+    // The object
     GLuint VBO;
     GLuint VAO;
     glGenBuffers(1, &VBO);
@@ -119,54 +121,43 @@ int main (int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+
+    // Light object
+    GLuint VAO_light;
+    glGenVertexArrays(1, &VAO_light);
+
+    glBindVertexArray(VAO_light);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Texture
-    // --------------------
-    GLuint texture;
-    glGenTextures(1, &texture);
-
-    const char *tex_path;
-    int width, height, num_channels;
-    unsigned char *data;
-
-    tex_path = "res/texture/container.jpg";
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    data = stbi_load(tex_path, &width, &height, &num_channels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else
-    {
-        RoadGL::Log("ERROR::TEXTURE::GERNERATION", "Texture loading falied");
-    }
-    stbi_image_free(data);
 
     // One-time-set variables
     // --------------------
     glm::mat4 model      = glm::mat4(1.0f);
     glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
-
-    model      = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+
+    glm::vec3 object_col = glm::vec3(1.0f, 0.5f, 0.31f);
+    glm::vec3 light_col  = glm::vec3(1.0f);
+
+    glm::mat4 light_model = glm::mat4(1.0f);
+    light_model = glm::translate(light_model, glm::vec3(0.5f, 0.0f, 1.5f));
+    light_model = glm::scale(light_model, glm::vec3(0.2f));
 
     shader.Use();
     shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
+    shader.SetVec3("object_col", object_col);
+    shader.SetVec3("light_col", light_col);
+
+    shader_light.Use();
+    shader_light.SetMat4("model", light_model);
+    shader_light.SetMat4("projection", projection);
 
     // Game loop
     // --------------------
@@ -181,13 +172,16 @@ int main (int argc, char const *argv[])
         glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(VAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
 
         view = camera.GetViewMatrix();
 
         shader.Use();
         shader.SetMat4("view", view);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        glBindVertexArray(VAO_light);
+        shader_light.Use();
+        shader_light.SetMat4("view", view);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);

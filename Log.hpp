@@ -1,7 +1,7 @@
 #ifndef __LOG_HPP__
 #define __LOG_HPP__
 
-namespace unnamed
+namespace RoadGL
 {
     void Log (const char *tag, const char *message);
     void SimpleLog (const char *message);

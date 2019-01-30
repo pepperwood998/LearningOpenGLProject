@@ -31,7 +31,7 @@ Shader::Shader (const char *vertex_path, const char *fragment_path)
 
     } catch (std::fstream::failure ex)
     {
-        unnamed::Log("ERROR::SHADER::FILE", "Shader file read failed");
+        RoadGL::Log("ERROR::SHADER::FILE", "Shader file read failed");
     }
 
     GLuint vert_shader = CompileShader(GL_VERTEX_SHADER, vert_src.c_str());
@@ -63,7 +63,7 @@ GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
     if (!success)
     {
         glGetShaderInfoLog(shader, 512, NULL, info_log);
-        unnamed::Log("ERROR::SHADER::COMPILATION", info_log);
+        RoadGL::Log("ERROR::SHADER::COMPILATION", info_log);
     }
 
     return shader;
@@ -83,7 +83,7 @@ GLuint Shader::LinkShaders (GLuint vertex_shader, GLuint fragment_shader)
     if (!success)
     {
         glGetProgramInfoLog(program, 512, NULL, info_log);
-        unnamed::Log("ERROR::SHADER::LINKING", info_log);
+        RoadGL::Log("ERROR::SHADER::LINKING", info_log);
     }
 
     glDeleteShader(vertex_shader);

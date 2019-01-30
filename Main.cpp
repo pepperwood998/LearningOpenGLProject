@@ -42,7 +42,7 @@ int main (int argc, char const *argv[])
     if (!window)
     {
         glfwTerminate();
-        unnamed::Log("ERROR::GLFW::INIT", "Window creation failed");
+        RoadGL::Log("ERROR::GLFW::INIT", "Window creation failed");
         return -1;
     }
     glfwMakeContextCurrent(window);
@@ -53,7 +53,7 @@ int main (int argc, char const *argv[])
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         glfwTerminate();
-        unnamed::Log("ERROR::GLAD::INIT", "OpenGL function pointers load failed");
+        RoadGL::Log("ERROR::GLAD::INIT", "OpenGL function pointers load failed");
         return -1;
     }
     glfwSetFramebufferSizeCallback(window, cb_FramebufferSize);
@@ -146,7 +146,7 @@ int main (int argc, char const *argv[])
         glGenerateMipmap(GL_TEXTURE_2D);
     } else
     {
-        unnamed::Log("ERROR::TEXTURE::GERNERATION", "Texture loading falied");
+        RoadGL::Log("ERROR::TEXTURE::GERNERATION", "Texture loading falied");
     }
     stbi_image_free(data);
 

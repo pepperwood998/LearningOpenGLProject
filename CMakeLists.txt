@@ -11,12 +11,9 @@ add_executable(Run)
 target_sources(
     Run PRIVATE
     Main.cpp
-    Log.cpp
-    Log.hpp
-    Shader.hpp
-    Shader.cpp
-    Camera.hpp
-    Camera.cpp
+    Log.hpp Log.cpp
+    Shader.hpp Shader.cpp
+    Camera.hpp Camera.cpp
     glad.c
 )
 target_include_directories(
@@ -32,7 +29,6 @@ install(
     TARGETS Run
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/bin/"
 )
-
 install(
     DIRECTORY res/
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/bin/res"

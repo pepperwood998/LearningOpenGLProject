@@ -33,6 +33,7 @@ void cb_FramebufferSize (GLFWwindow *window, int width, int height);
 int main (int argc, char const *argv[])
 {
     // GLFW
+    // --------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -50,6 +51,7 @@ int main (int argc, char const *argv[])
     glfwSetCursorPosCallback(window, cb_MouseMove);
 
     // GLAD
+    // --------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         glfwTerminate();
@@ -60,7 +62,9 @@ int main (int argc, char const *argv[])
     glEnable(GL_DEPTH_TEST);
 
     Shader shader("res/shader/shader.vs", "res/shader/shader.fs");
+
     // Vertices data
+    // --------------------
     float vertices[] = 
     {   // Position           // Tex-coord
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -124,6 +128,7 @@ int main (int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Texture
+    // --------------------
     GLuint texture;
     glGenTextures(1, &texture);
 
@@ -150,10 +155,12 @@ int main (int argc, char const *argv[])
     }
     stbi_image_free(data);
 
-    // One-time-set Variables
+    // One-time-set variables
+    // --------------------
     glm::mat4 model      = glm::mat4(1.0f);
     glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
+
     model      = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 1.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
@@ -161,7 +168,8 @@ int main (int argc, char const *argv[])
     shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
 
-    // Game Loop
+    // Game loop
+    // --------------------
     while (!glfwWindowShouldClose(window))
     {
         float current_frame_time = glfwGetTime();
@@ -186,6 +194,8 @@ int main (int argc, char const *argv[])
         glfwPollEvents();
     }
 
+    // Clean up
+    // --------------------
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDeleteVertexArrays(1, &VAO);

@@ -7,13 +7,14 @@ class Shader
 {
 private:
     GLuint _ID;
+
+    static GLuint CompileShader (GLenum shader_type, const char *shader_src);
+    static GLuint LinkShaders (GLuint vertex_shader, GLuint fragment_shader);
+    
 public:
     Shader (const char *vertex_path, const char *fragment_path);
     void Use ();
     void SetMat4 (const char *name, glm::mat4 value);
-
-    static GLuint CompileShader (GLenum shader_type, const char *shader_src);
-    static GLuint LinkShaders (GLuint vertex_shader, GLuint fragment_shader);
 };
 
 #endif // __SHADER_HPP

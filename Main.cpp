@@ -24,6 +24,8 @@ float last_frame_time = 0.0f;
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
 
+GLuint LoadTexture (const char *tex_path);
+
 // Mouse movement callback
 void cb_MouseMove(GLFWwindow *window, double pos_x, double pos_y);
 
@@ -68,48 +70,48 @@ int main (int argc, char const *argv[])
     // --------------------
     float vertices[] = 
     {
-        // Position            // Normal-vector position
-        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
-         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
-         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
-        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
-        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+         // Position          // Normal            // Tex-coord
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
     // The object
@@ -122,21 +124,27 @@ int main (int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // Light object
     GLuint VAO_light;
     glGenVertexArrays(1, &VAO_light);
 
     glBindVertexArray(VAO_light);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Texture
+    // --------------------
+    GLuint texture = LoadTexture("res/texture/container2.png");
 
     // One-time-set variables
     // --------------------
@@ -157,12 +165,11 @@ int main (int argc, char const *argv[])
     shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
 
-    shader.SetVec3("material.ambient",  glm::vec3(1.0f, 0.5f, 0.31f));
-    shader.SetVec3("material.diffuse",  glm::vec3(1.0f, 0.5f, 0.31f));
+    shader.SetInt("material.orig_col", 0);
     shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetFloat("material.shininess", 32.0f);
+    
     shader.SetVec3("light.position", light_pos);
-
     shader.SetVec3("light.ambient", glm::vec3(0.2f));
     shader.SetVec3("light.diffuse", glm::vec3(0.5f));
     shader.SetVec3("light.specular", glm::vec3(1.0f));
@@ -184,6 +191,8 @@ int main (int argc, char const *argv[])
         glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(VAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         view = camera.GetViewMatrix();
 
@@ -235,6 +244,49 @@ void ProcessInput (GLFWwindow *window)
             camera.Move(CameraDirection::RIGHT, delta_time);
         }
     }
+}
+
+GLuint LoadTexture (const char *tex_path)
+{
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    int width, height, num_channels;
+    unsigned char *data;
+    
+    data = stbi_load(tex_path, &width, &height, &num_channels, 0);
+    if (data)
+    {
+        GLenum format;
+        switch (num_channels)
+        {
+            case 1:
+                format = GL_RED;
+                break;
+            case 3:
+                format = GL_RGB;
+                break;
+            case 4:
+                format = GL_RGBA;
+                break;
+            default:
+                break;
+        }
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else
+    {
+        RoadGL::Log("ERROR::TEXTURE::INIT", "Texture loading failed");
+    }
+
+    stbi_image_free(data);
+    return texture;
 }
 
 void cb_MouseMove (GLFWwindow *window, double pos_x, double pos_y)

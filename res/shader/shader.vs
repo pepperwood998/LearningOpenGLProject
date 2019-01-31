@@ -1,6 +1,7 @@
 #version 330 core
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 tex_coord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -8,6 +9,7 @@ uniform mat4 projection;
 
 out vec3 stage_frag_pos;
 out vec3 stage_normal;
+out vec2 stage_tex_coord;
 
 void main()
 {
@@ -16,4 +18,5 @@ void main()
 
     stage_frag_pos = vec3(model_pos);
     stage_normal = normal;
+    stage_tex_coord = tex_coord;
 }

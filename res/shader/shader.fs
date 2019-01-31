@@ -2,11 +2,11 @@
 out vec4 final_col;
 in vec3 stage_frag_pos;
 in vec3 stage_normal;
+in vec2 stage_tex_coord;
 
 struct Material
 {
-    vec3 ambient;
-    vec3 diffuse;
+    sampler2D orig_col;
     vec3 specular;
     float shininess;
 };
@@ -25,13 +25,13 @@ uniform vec3 view_pos;
 void main()
 {
     // Ambient lighting
-    vec3 ambient = light.ambient * material.ambient;
+    vec3 ambient = light.ambient * vec3(texture(material.orig_col, stage_tex_coord));
 
     // Diffuse lighting
     vec3 light_inv_dir = normalize(light.position - stage_frag_pos);
     vec3 norm_normal = normalize(stage_normal);
     float diff = max(dot(light_inv_dir, norm_normal), 0.0);
-    vec3 diffuse = light.diffuse * diff * material.diffuse;
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.orig_col, stage_tex_coord));
 
     // Specular lighting
     vec3 reflect_dir = reflect(-light_inv_dir, norm_normal);

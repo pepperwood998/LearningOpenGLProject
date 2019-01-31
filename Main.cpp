@@ -156,12 +156,16 @@ int main (int argc, char const *argv[])
     shader.Use();
     shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
+
     shader.SetVec3("material.ambient",  glm::vec3(1.0f, 0.5f, 0.31f));
     shader.SetVec3("material.diffuse",  glm::vec3(1.0f, 0.5f, 0.31f));
     shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetFloat("material.shininess", 32.0f);
-    shader.SetVec3("light_pos", light_pos);
-    shader.SetVec3("light_col", light_col);
+    shader.SetVec3("light.position", light_pos);
+
+    shader.SetVec3("light.ambient", glm::vec3(0.2f));
+    shader.SetVec3("light.diffuse", glm::vec3(0.5f));
+    shader.SetVec3("light.specular", glm::vec3(1.0f));
 
     shader_light.Use();
     shader_light.SetMat4("model", light_model);

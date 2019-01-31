@@ -145,6 +145,7 @@ int main (int argc, char const *argv[])
     // Texture
     // --------------------
     GLuint texture = LoadTexture("res/texture/container2.png");
+    GLuint texture_specular = LoadTexture("res/texture/container2_specular.png");
 
     // One-time-set variables
     // --------------------
@@ -166,9 +167,9 @@ int main (int argc, char const *argv[])
     shader.SetMat4("projection", projection);
 
     shader.SetInt("material.orig_col", 0);
-    shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    shader.SetInt("material.specular", 1);
     shader.SetFloat("material.shininess", 32.0f);
-    
+
     shader.SetVec3("light.position", light_pos);
     shader.SetVec3("light.ambient", glm::vec3(0.2f));
     shader.SetVec3("light.diffuse", glm::vec3(0.5f));
@@ -193,6 +194,8 @@ int main (int argc, char const *argv[])
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture_specular);
 
         view = camera.GetViewMatrix();
 

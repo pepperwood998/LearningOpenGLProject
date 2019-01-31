@@ -7,7 +7,7 @@ in vec2 stage_tex_coord;
 struct Material
 {
     sampler2D orig_col;
-    vec3 specular;
+    sampler2D specular;
     float shininess;
 };
 struct Light
@@ -37,7 +37,7 @@ void main()
     vec3 reflect_dir = reflect(-light_inv_dir, norm_normal);
     vec3 view_inv_dir = normalize(view_pos - stage_frag_pos);
     float spec = pow(max(dot(reflect_dir, view_inv_dir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * material.specular;
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, stage_tex_coord));
 
     vec3 result = ambient + diffuse + specular;
     final_col = vec4(result, 1.0);

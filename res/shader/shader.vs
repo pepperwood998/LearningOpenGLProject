@@ -17,6 +17,6 @@ void main()
     gl_Position =  projection * view * model_pos;
 
     stage_frag_pos = vec3(model_pos);
-    stage_normal = normal;
+    stage_normal = mat3(model) * normal;
     stage_tex_coord = tex_coord;
 }

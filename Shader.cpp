@@ -54,12 +54,12 @@ void Shader::SetFloat (const char *name, const float value)
     glUniform1f(glGetUniformLocation(_ID, name), value);
 }
 
-void Shader::SetVec3 (const char *name, glm::vec3 value)
+void Shader::SetVec3 (const char *name, const glm::vec3 &value)
 {
     glUniform3fv(glGetUniformLocation(_ID, name), 1, &value.r);
 }
 
-void Shader::SetMat4 (const char *name, glm::mat4 value)
+void Shader::SetMat4 (const char *name, const glm::mat4 &value)
 {
     glUniformMatrix4fv(glGetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value));
 }

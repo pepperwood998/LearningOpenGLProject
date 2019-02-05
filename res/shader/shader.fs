@@ -10,7 +10,7 @@ struct Material
     sampler2D specular;
     float shininess;
 };
-struct Light
+struct PointLight
 {
     vec3 position;
     vec3 ambient;
@@ -19,26 +19,34 @@ struct Light
 };
 
 uniform Material material;
-uniform Light light;
+uniform PointLight point_light;
 uniform vec3 view_pos;
+
+vec3 CalcPointLight(PointLight light, vec3 frag_pos, vec3 norm_normal, vec3 view_inv_dir);
 
 void main()
 {
-    // Ambient lighting
-    vec3 ambient = light.ambient * vec3(texture(material.orig_col, stage_tex_coord));
-
-    // Diffuse lighting
-    vec3 light_inv_dir = normalize(light.position - stage_frag_pos);
+    vec3 result = vec3(0.0);
     vec3 norm_normal = normalize(stage_normal);
-    float diff = max(dot(light_inv_dir, norm_normal), 0.0);
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.orig_col, stage_tex_coord));
-
-    // Specular lighting
-    vec3 reflect_dir = reflect(-light_inv_dir, norm_normal);
     vec3 view_inv_dir = normalize(view_pos - stage_frag_pos);
-    float spec = pow(max(dot(reflect_dir, view_inv_dir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, stage_tex_coord));
 
-    vec3 result = ambient + diffuse + specular;
+    result += CalcPointLight(point_light, stage_frag_pos, norm_normal, view_inv_dir);
+
     final_col = vec4(result, 1.0);
+}
+
+vec3 CalcPointLight(PointLight light, vec3 frag_pos, vec3 norm_normal, vec3 view_inv_dir)
+{
+    // Ambient Lighting
+    vec3 ambient = light.ambient * vec3(texture(material.orig_col, stage_tex_coord));
+    // Diffuse Lighting
+    vec3 light_inv_dir = normalize(light.position - frag_pos);
+    float diff = max(dot(light_inv_dir, norm_normal), 0.0);
+    vec3 diffuse = light.diffuse * vec3(texture(material.orig_col, stage_tex_coord)) * diff;
+    // Specular Lighting
+    vec3 reflect_dir = reflect(-light_inv_dir, norm_normal);
+    float spec = pow(max(dot(reflect_dir, view_inv_dir), 0.0), material.shininess);
+    vec3 specular = light.specular * vec3(texture(material.specular, stage_tex_coord)) * spec;
+
+    return (ambient + diffuse + specular);
 }

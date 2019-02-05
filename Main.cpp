@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "Log.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
@@ -25,6 +26,8 @@ float last_frame_time = 0.0f;
 void ProcessInput (GLFWwindow *window);
 
 GLuint LoadTexture (const char *tex_path);
+
+void FillObjectLightingData(std::vector<glm::mat4> &models, std::vector<glm::mat4> &normal_mats, const unsigned int object_num, const glm::vec3 *data);
 
 // Mouse movement callback
 void cb_MouseMove(GLFWwindow *window, double pos_x, double pos_y);
@@ -113,6 +116,23 @@ int main (int argc, char const *argv[])
         -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
+    // more cubes
+    glm::vec3 cube_positions[] =
+    {
+        glm::vec3( 0.0f,  0.0f,  0.0f), 
+        glm::vec3( 2.0f,  5.0f, -15.0f), 
+        glm::vec3(-1.5f, -2.2f, -2.5f),  
+        glm::vec3(-3.8f, -2.0f, -12.3f),  
+        glm::vec3( 2.4f, -0.4f, -3.5f),  
+        glm::vec3(-1.7f,  3.0f, -7.5f),  
+        glm::vec3( 1.3f, -2.0f, -2.5f),  
+        glm::vec3( 1.5f,  2.0f, -2.5f), 
+        glm::vec3( 1.5f,  0.2f, -1.5f), 
+        glm::vec3(-1.3f,  1.0f, -1.5f)  
+    };
+    std::vector<glm::mat4> models;
+    std::vector<glm::mat4> normal_mats;
+    FillObjectLightingData(models, normal_mats, 10, cube_positions);
 
     // The object
     GLuint VBO;
@@ -149,7 +169,6 @@ int main (int argc, char const *argv[])
 
     // One-time-set variables
     // --------------------
-    glm::mat4 model      = glm::mat4(1.0f);
     glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -163,7 +182,6 @@ int main (int argc, char const *argv[])
     light_model = glm::scale(light_model, glm::vec3(0.2f));
 
     shader.Use();
-    shader.SetMat4("model", model);
     shader.SetMat4("projection", projection);
 
     shader.SetInt("material.orig_col", 0);
@@ -202,7 +220,13 @@ int main (int argc, char const *argv[])
         shader.Use();
         shader.SetMat4("view", view);
         shader.SetVec3("view_pos", camera.GetPos());
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for (unsigned int i = 0; i < 10; ++i)
+        {
+            shader.SetMat4("model", models[i]);
+            shader.SetMat4("normal_mat", normal_mats[i]);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glBindVertexArray(VAO_light);
         shader_light.Use();
@@ -246,6 +270,23 @@ void ProcessInput (GLFWwindow *window)
         {
             camera.Move(CameraDirection::RIGHT, delta_time);
         }
+    }
+}
+
+void FillObjectLightingData(std::vector<glm::mat4> &models, std::vector<glm::mat4> &normal_mats, const unsigned int object_num, const glm::vec3 *data)
+{
+    for (unsigned int i = 0; i < object_num; ++i)
+    {
+        glm::mat4 model      = glm::mat4(1.0f);
+        glm::mat4 normal_mat = glm::mat4(1.0f);
+
+        model = glm::translate(model, data[i]);
+        float angle = 20.0f * i;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        normal_mat = glm::transpose(glm::inverse(model));
+
+        models.push_back(model);
+        normal_mats.push_back(normal_mat);
     }
 }
 

@@ -6,6 +6,7 @@ layout (location = 2) in vec2 tex_coord;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 normal_mat;
 
 out vec3 stage_frag_pos;
 out vec3 stage_normal;
@@ -17,6 +18,6 @@ void main()
     gl_Position =  projection * view * model_pos;
 
     stage_frag_pos = vec3(model_pos);
-    stage_normal = mat3(model) * normal;
+    stage_normal = mat3(normal_mat) * normal;
     stage_tex_coord = tex_coord;
 }

@@ -19,7 +19,7 @@ struct PointLight
 };
 
 uniform Material material;
-uniform PointLight point_light;
+uniform PointLight point_lights[4];
 uniform vec3 view_pos;
 
 vec3 CalcPointLight(PointLight light, vec3 frag_pos, vec3 norm_normal, vec3 view_inv_dir);
@@ -30,7 +30,10 @@ void main()
     vec3 norm_normal = normalize(stage_normal);
     vec3 view_inv_dir = normalize(view_pos - stage_frag_pos);
 
-    result += CalcPointLight(point_light, stage_frag_pos, norm_normal, view_inv_dir);
+    for (int i = 0; i < 4; ++i)
+    {
+        result += CalcPointLight(point_lights[i], stage_frag_pos, norm_normal, view_inv_dir);
+    }
 
     final_col = vec4(result, 1.0);
 }

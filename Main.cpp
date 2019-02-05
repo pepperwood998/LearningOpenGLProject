@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <algorithm>
+#include <string>
 #include "Log.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
@@ -175,11 +177,23 @@ int main (int argc, char const *argv[])
 
     glm::vec3 object_col = glm::vec3(1.0f, 0.5f, 0.31f);
     glm::vec3 light_col  = glm::vec3(1.0f);
-    
-    glm::vec3 light_pos   = glm::vec3(0.5f, 0.0f, 1.5f);
-    glm::mat4 light_model = glm::mat4(1.0f);
-    light_model = glm::translate(light_model, light_pos);
-    light_model = glm::scale(light_model, glm::vec3(0.2f));
+    // Point-lighting positions and models
+    glm::vec3 point_light_poss[] = 
+    {
+        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3( 0.0f,  0.0f, -3.0f)
+    };
+    glm::mat4 point_light_models[4];
+    for (unsigned int i = 0; i < 4; ++i)
+    {
+        glm::mat4 point_light_model = glm::mat4(1.0f);
+
+        point_light_model     = glm::translate(point_light_model, point_light_poss[i]);
+        point_light_model     = glm::scale(point_light_model, glm::vec3(0.2f));
+        point_light_models[i] = point_light_model;
+    }
 
     shader.Use();
     shader.SetMat4("projection", projection);
@@ -187,14 +201,18 @@ int main (int argc, char const *argv[])
     shader.SetInt("material.orig_col", 0);
     shader.SetInt("material.specular", 1);
     shader.SetFloat("material.shininess", 32.0f);
+    // set point-lights information
+    for (unsigned int i = 0; i < 4; ++i)
+    {
+        std::string str_point_light = std::string("point_lights[") + std::to_string(i) + std::string("]");
 
-    shader.SetVec3("point_light.position", light_pos);
-    shader.SetVec3("point_light.ambient", glm::vec3(0.2f));
-    shader.SetVec3("point_light.diffuse", glm::vec3(0.5f));
-    shader.SetVec3("point_light.specular", glm::vec3(1.0f));
+        shader.SetVec3((str_point_light + std::string(".position")).c_str(), point_light_poss[i]);
+        shader.SetVec3((str_point_light + std::string(".ambient")).c_str(), glm::vec3(0.2f));
+        shader.SetVec3((str_point_light + std::string(".diffuse")).c_str(), glm::vec3(0.5f));
+        shader.SetVec3((str_point_light + std::string(".specular")).c_str(), glm::vec3(1.0f));
+    }
 
     shader_light.Use();
-    shader_light.SetMat4("model", light_model);
     shader_light.SetMat4("projection", projection);
 
     // Game loop
@@ -231,7 +249,12 @@ int main (int argc, char const *argv[])
         glBindVertexArray(VAO_light);
         shader_light.Use();
         shader_light.SetMat4("view", view);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for (unsigned int i = 0; i < 4; ++i)
+        {
+            shader_light.SetMat4("model", point_light_models[i]);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -151,14 +151,17 @@ int main (int argc, char const *argv[])
         glm::vec3( 0.0f,  0.0f, -3.0f )
     };
     glm::mat4 point_light_models[4];
-    for (unsigned int i = 0; i < 4; ++i)
-    {
-        glm::mat4 point_light_model = glm::mat4(1.0f);
+    std::for_each(std::begin(point_light_poss), std::end(point_light_poss), 
+                  [&point_light_models](const glm::vec3 &position)
+                  {
+                      static unsigned int i = 0;
+                      glm::mat4 point_light_model = glm::mat4(1.0f);
 
-        point_light_model     = glm::translate(point_light_model, point_light_poss[i]);
-        point_light_model     = glm::scale(point_light_model, glm::vec3(0.2f));
-        point_light_models[i] = point_light_model;
-    }
+                      point_light_model       = glm::translate(point_light_model, position);
+                      point_light_model       = glm::scale(point_light_model, glm::vec3(0.2f));
+                      point_light_models[i++] = point_light_model;
+                  }
+    );
 
     // OpenGL's objects and data interpretation
     // --------------------

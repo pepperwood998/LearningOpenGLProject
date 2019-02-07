@@ -33,8 +33,8 @@ public:
     ~Camera ();
 
     glm::mat4 GetViewMatrix ();
-    glm::vec3 GetPos();
-    glm::vec3 GetDir();
+    glm::vec3 GetPos        () { return _position; }
+    glm::vec3 GetDir        () { return _front ;}
 
     void Move (CameraDirection camera_dir, float delta_time);
     void Look (float offset_x, float offset_y);

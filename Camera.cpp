@@ -10,7 +10,7 @@ Camera::Camera (glm::vec3 position, float speed, float sens, glm::vec3 front, gl
     this->UpdateCameraVectors();
 }
 
-Camera::~Camera()
+Camera::~Camera ()
 {
 }
 
@@ -20,19 +20,10 @@ glm::mat4 Camera::GetViewMatrix ()
     return view;
 }
 
-glm::vec3 Camera::GetPos ()
-{
-    return _position;
-}
-
-glm::vec3 Camera::GetDir()
-{
-    return _front;
-}
-
 void Camera::UpdateCameraVectors ()
 {
     glm::vec3 front = glm::vec3(0.0f);
+    
     front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     front.y = sin(glm::radians(pitch));
     front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));

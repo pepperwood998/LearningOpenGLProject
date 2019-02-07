@@ -8,10 +8,11 @@ project(
 find_package(glfw3 3.2 REQUIRED)
 
 add_executable(Run)
+
 target_sources(
     Run PRIVATE
     Main.cpp
-    Log.hpp Log.cpp
+    Log.hpp    Log.cpp
     Shader.hpp Shader.cpp
     Camera.hpp Camera.cpp
     glad.c

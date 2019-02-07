@@ -201,6 +201,11 @@ int main (int argc, char const *argv[])
     shader.SetInt("material.orig_col", 0);
     shader.SetInt("material.specular", 1);
     shader.SetFloat("material.shininess", 32.0f);
+    // set diretional light information
+    shader.SetVec3("dir_light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+    shader.SetVec3("dir_light.ambient",   glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetVec3("dir_light.diffuse",   glm::vec3(0.4f, 0.4f, 0.4f));
+    shader.SetVec3("dir_light.specular",  glm::vec3(0.5f, 0.5f, 0.5f));
     // set point-lights information
     for (unsigned int i = 0; i < 4; ++i)
     {
@@ -214,6 +219,15 @@ int main (int argc, char const *argv[])
         shader.SetFloat((str_point_light + std::string(".linear")).c_str(), 0.09f);
         shader.SetFloat((str_point_light + std::string(".quadratic")).c_str(), 0.032f);
     }
+    // Spotlight
+    shader.SetVec3("spot_light.ambient",  glm::vec3(0.2f));
+    shader.SetVec3("spot_light.diffuse",  glm::vec3(0.5f));
+    shader.SetVec3("spot_light.specular", glm::vec3(1.0f));
+    shader.SetFloat("spot_light.constant",      1.0f);
+    shader.SetFloat("spot_light.linear",        0.09f);
+    shader.SetFloat("spot_light.quadratic",     0.032f);
+    shader.SetFloat("spot_light.cut_off",       glm::cos(glm::radians(12.5f)));
+    shader.SetFloat("spot_light.outer_cut_off", glm::cos(glm::radians(17.5f)));
 
     shader_light.Use();
     shader_light.SetMat4("projection", projection);
@@ -228,7 +242,7 @@ int main (int argc, char const *argv[])
 
         ProcessInput(window);
 
-        glClearColor(0.0f, 0.28f, 0.7f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
@@ -248,6 +262,8 @@ int main (int argc, char const *argv[])
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+        shader.SetVec3("spot_light.position", camera.GetPos());
+        shader.SetVec3("spot_light.direction", camera.GetDir());
 
         glBindVertexArray(VAO_light);
         shader_light.Use();

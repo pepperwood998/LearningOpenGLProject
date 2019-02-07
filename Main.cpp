@@ -210,6 +210,9 @@ int main (int argc, char const *argv[])
         shader.SetVec3((str_point_light + std::string(".ambient")).c_str(), glm::vec3(0.2f));
         shader.SetVec3((str_point_light + std::string(".diffuse")).c_str(), glm::vec3(0.5f));
         shader.SetVec3((str_point_light + std::string(".specular")).c_str(), glm::vec3(1.0f));
+        shader.SetFloat((str_point_light + std::string(".constant")).c_str(), 1.0f);
+        shader.SetFloat((str_point_light + std::string(".linear")).c_str(), 0.09f);
+        shader.SetFloat((str_point_light + std::string(".quadratic")).c_str(), 0.032f);
     }
 
     shader_light.Use();

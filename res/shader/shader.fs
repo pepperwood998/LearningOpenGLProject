@@ -16,6 +16,10 @@ struct PointLight
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 uniform Material material;
@@ -50,6 +54,15 @@ vec3 CalcPointLight(PointLight light, vec3 frag_pos, vec3 norm_normal, vec3 view
     vec3 reflect_dir = reflect(-light_inv_dir, norm_normal);
     float spec = pow(max(dot(reflect_dir, view_inv_dir), 0.0), material.shininess);
     vec3 specular = light.specular * vec3(texture(material.specular, stage_tex_coord)) * spec;
+
+    // Attenuation
+    float dist_light_frag = length(light.position - frag_pos);
+    float attenuation = 1.0 / (light.constant + 
+                               light.linear * dist_light_frag + 
+                               light.quadratic * (dist_light_frag * dist_light_frag));
+    ambient  *= attenuation;
+    diffuse  *= attenuation;
+    specular *= attenuation;
 
     return (ambient + diffuse + specular);
 }

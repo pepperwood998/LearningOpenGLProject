@@ -13,7 +13,7 @@ struct Vertex
 {
     glm::vec3 _position;
     glm::vec3 _normal;
-    glm::vec3 _tex_coord;
+    glm::vec2 _tex_coord;
 };
 
 struct Texture

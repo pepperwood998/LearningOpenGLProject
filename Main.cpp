@@ -11,9 +11,7 @@
 #include "Log.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "Model.hpp"
 
 const int WIDTH   = 800;
 const int HEIGHT  = 600;
@@ -29,12 +27,6 @@ float last_frame_time = 0.0f;
 
 // process inputs coming to "window"
 void ProcessInput (GLFWwindow *window);
-
-GLuint LoadTexture (const char *tex_path);
-
-void FillObjectLightingData (std::vector<glm::mat4> &models, 
-                             std::vector<glm::mat4> &normal_mats, 
-                             const unsigned int object_num, const glm::vec3 *data);
 
 // Callback Functions
 // --------------------
@@ -75,170 +67,22 @@ int main (int argc, char const *argv[])
     glEnable(GL_DEPTH_TEST);
     glfwSetFramebufferSizeCallback(window, cb_FramebufferSize);
 
-    Shader shader      ("res/shader/shader.vs", "res/shader/shader.fs");
-    Shader shader_light("res/shader/shader_light.vs", "res/shader/shader_light.fs");
-
-    // Vertices data
-    // --------------------
-    float vertices[] = 
-    {
-         // Positions         // Normals           // Tex-coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-    };
-    // more cubes
-    glm::vec3 cube_positions[] =
-    {
-        glm::vec3( 0.0f,  0.0f,  0.0f ), 
-        glm::vec3( 2.0f,  5.0f, -15.0f), 
-        glm::vec3(-1.5f, -2.2f, -2.5f ), 
-        glm::vec3(-3.8f, -2.0f, -12.3f), 
-        glm::vec3( 2.4f, -0.4f, -3.5f ), 
-        glm::vec3(-1.7f,  3.0f, -7.5f ), 
-        glm::vec3( 1.3f, -2.0f, -2.5f ), 
-        glm::vec3( 1.5f,  2.0f, -2.5f ), 
-        glm::vec3( 1.5f,  0.2f, -1.5f ), 
-        glm::vec3(-1.3f,  1.0f, -1.5f )
-    };
-    std::vector<glm::mat4> models;
-    std::vector<glm::mat4> normal_mats;
-    FillObjectLightingData(models, normal_mats, 10, cube_positions);
-    // Point-light's positions and models
-    glm::vec3 point_light_poss[] = 
-    {
-        glm::vec3( 0.7f,  0.2f,  2.0f ),
-        glm::vec3( 2.3f, -3.3f, -4.0f ),
-        glm::vec3(-4.0f,  2.0f, -12.0f),
-        glm::vec3( 0.0f,  0.0f, -3.0f )
-    };
-    glm::mat4 point_light_models[4];
-    std::for_each(std::begin(point_light_poss), std::end(point_light_poss), 
-                  [&point_light_models](const glm::vec3 &position)
-                  {
-                      static unsigned int i = 0;
-                      glm::mat4 point_light_model = glm::mat4(1.0f);
-
-                      point_light_model       = glm::translate(point_light_model, position);
-                      point_light_model       = glm::scale(point_light_model, glm::vec3(0.2f));
-                      point_light_models[i++] = point_light_model;
-                  }
-    );
-
-    // OpenGL's objects and data interpretation
-    // --------------------
-    // Scene's objects
-    GLuint VBO;
-    GLuint VAO;
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    // Light object
-    GLuint VAO_light;
-    glGenVertexArrays(1, &VAO_light);
-
-    glBindVertexArray(VAO_light);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Texture
-    // --------------------
-    GLuint texture          = LoadTexture("res/texture/container2.png");
-    GLuint texture_specular = LoadTexture("res/texture/container2_specular.png");
+    Shader shader ("res/shader/shader.vs", "res/shader/shader.fs");
 
     // One-time-set variables
     // --------------------
+    Model nanosuit = Model("res/model/nanosuit/nanosuit.obj");
+
+    glm::mat4 model      = glm::mat4(1.0f);
     glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
+
+    model      = glm::scale(model, glm::vec3(0.2f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
     // Object-shader's uniforms setting
     shader.Use();
+    shader.SetMat4("model",      model);
     shader.SetMat4("projection", projection);
-    // set object's material
-    shader.SetInt  ("material.orig_col",  0);
-    shader.SetInt  ("material.specular",  1);
-    shader.SetFloat("material.shininess", 32.0f);
-    // set diretional light's information
-    shader.SetVec3("dir_light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-    shader.SetVec3("dir_light.ambient",   glm::vec3(0.05f, 0.05f, 0.05f));
-    shader.SetVec3("dir_light.diffuse",   glm::vec3(0.4f, 0.4f, 0.4f));
-    shader.SetVec3("dir_light.specular",  glm::vec3(0.5f, 0.5f, 0.5f));
-    // set point-lights' information
-    for (unsigned int i = 0; i < 4; ++i)
-    {
-        std::string str_point_light = std::string("point_lights[") + std::to_string(i) + std::string("]");
-
-        shader.SetVec3 ((str_point_light + std::string(".position")).c_str(),  point_light_poss[i]);
-        shader.SetVec3 ((str_point_light + std::string(".ambient")).c_str(),   glm::vec3(0.2f));
-        shader.SetVec3 ((str_point_light + std::string(".diffuse")).c_str(),   glm::vec3(0.5f));
-        shader.SetVec3 ((str_point_light + std::string(".specular")).c_str(),  glm::vec3(1.0f));
-        shader.SetFloat((str_point_light + std::string(".constant")).c_str(),  1.0f);
-        shader.SetFloat((str_point_light + std::string(".linear")).c_str(),    0.09f);
-        shader.SetFloat((str_point_light + std::string(".quadratic")).c_str(), 0.032f);
-    }
-    // set spotlight's information
-    shader.SetVec3 ("spot_light.ambient",       glm::vec3(0.2f));
-    shader.SetVec3 ("spot_light.diffuse",       glm::vec3(0.5f));
-    shader.SetVec3 ("spot_light.specular",      glm::vec3(1.0f));
-    shader.SetFloat("spot_light.constant",      1.0f);
-    shader.SetFloat("spot_light.linear",        0.09f);
-    shader.SetFloat("spot_light.quadratic",     0.032f);
-    shader.SetFloat("spot_light.cut_off",       glm::cos(glm::radians(12.5f)));
-    shader.SetFloat("spot_light.outer_cut_off", glm::cos(glm::radians(17.5f)));
-    // Light-object-shader's uniforms setting
-    shader_light.Use();
-    shader_light.SetMat4("projection", projection);
 
     // Game loop
     // --------------------
@@ -253,39 +97,13 @@ int main (int argc, char const *argv[])
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear     (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // Scene main objects
-        glBindVertexArray(VAO);
-        glActiveTexture  (GL_TEXTURE0);
-        glBindTexture    (GL_TEXTURE_2D, texture);
-        glActiveTexture  (GL_TEXTURE1);
-        glBindTexture    (GL_TEXTURE_2D, texture_specular);
 
         view = camera.GetViewMatrix();
 
         shader.Use();
-        shader.SetMat4("view",     view);
-        shader.SetVec3("view_pos", camera.GetPos());
-        for (unsigned int i = 0; i < 10; ++i)
-        {
-            shader.SetMat4("model",      models[i]);
-            shader.SetMat4("normal_mat", normal_mats[i]);
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-        shader.SetVec3("spot_light.position",  camera.GetPos());
-        shader.SetVec3("spot_light.direction", camera.GetDir());
-
-        // Light-cube objects
-        glBindVertexArray(VAO_light);
-
-        shader_light.Use();
-        shader_light.SetMat4("view", view);
-        for (unsigned int i = 0; i < 4; ++i)
-        {
-            shader_light.SetMat4("model", point_light_models[i]);
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        shader.SetMat4("view", view);
+        
+        nanosuit.Draw(shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -293,10 +111,6 @@ int main (int argc, char const *argv[])
 
     // Clean up
     // --------------------
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
     glfwTerminate();
     return 0;
 }
@@ -325,68 +139,6 @@ void ProcessInput (GLFWwindow *window)
             camera.Move(CameraDirection::RIGHT, delta_time);
         }
     }
-}
-
-void FillObjectLightingData (std::vector<glm::mat4> &models, 
-                             std::vector<glm::mat4> &normal_mats, 
-                             const unsigned int object_num, const glm::vec3 *data)
-{
-    for (unsigned int i = 0; i < object_num; ++i)
-    {
-        glm::mat4 model      = glm::mat4(1.0f);
-        glm::mat4 normal_mat = glm::mat4(1.0f);
-
-        float angle = 20.0f * i;
-        model      = glm::translate(model, data[i]);
-        model      = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        normal_mat = glm::transpose(glm::inverse(model));
-
-        models.push_back(model);
-        normal_mats.push_back(normal_mat);
-    }
-}
-
-GLuint LoadTexture (const char *tex_path)
-{
-    GLuint texture;
-    glGenTextures(1, &texture);
-
-    int width, height, num_channels;
-    unsigned char *data;
-    
-    data = stbi_load(tex_path, &width, &height, &num_channels, 0);
-    if (data)
-    {
-        GLenum format;
-        switch (num_channels)
-        {
-            case 1:
-                format = GL_RED;
-                break;
-            case 3:
-                format = GL_RGB;
-                break;
-            case 4:
-                format = GL_RGBA;
-                break;
-            default:
-                break;
-        }
-        glBindTexture  (GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
-        glTexImage2D    (GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else
-    {
-        RoadGL::Log("ERROR::TEXTURE::INIT", "Texture loading failed");
-    }
-
-    stbi_image_free(data);
-    return texture;
 }
 
 void cb_MouseMove (GLFWwindow *window, double pos_x, double pos_y)

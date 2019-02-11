@@ -6,6 +6,7 @@ project(
 )
 
 find_package(glfw3 3.2 REQUIRED)
+find_package(ASSIMP REQUIRED)
 
 add_executable(Run)
 
@@ -16,6 +17,7 @@ target_sources(
     Shader.hpp Shader.cpp
     Camera.hpp Camera.cpp
     Mesh.hpp   Mesh.cpp
+    Model.hpp  Model.cpp
     glad.c
 )
 target_include_directories(
@@ -25,6 +27,7 @@ target_include_directories(
 target_link_libraries(
     Run PRIVATE
     glfw
+    ${ASSIMP_LIBRARIES}
 )
 
 install(

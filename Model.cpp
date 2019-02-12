@@ -116,11 +116,29 @@ std::vector<Texture> Model::LoadTextureMaterials (const aiMaterial *material, ai
     {
         aiString tex_file_name;
         material->GetTexture(texture_type, i, &tex_file_name);
-        
-        Texture texture;
-        texture._id        = GenTextureFromFile(tex_file_name.C_Str(), _directory);
-        texture._type_name = tex_type_name;
 
+        bool skip = false;
+        Texture texture;
+        // check if current texture has been loaded
+        for (unsigned int j = 0; j < _loaded_textures.size(); ++j)
+        {
+            texture = _loaded_textures[i];
+            if (std::strcmp(tex_file_name.C_Str(), texture._file_name.c_str()) == 0) 
+            {
+                skip = true;
+                break;
+            }
+        }
+        // skip this texture if it has been loaded
+        if (!skip)
+        {
+            texture._id        = GenTextureFromFile(tex_file_name.C_Str(), _directory);
+            texture._type_name = tex_type_name;
+            texture._file_name = tex_file_name.C_Str();
+
+            _loaded_textures.push_back(texture);
+        }
+        
         textures.push_back(texture);
     }
 

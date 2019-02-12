@@ -14,8 +14,9 @@
 class Model
 {
 private:
-    std::vector<Mesh> _meshes;
-    std::string       _directory;
+    std::vector<Mesh>     _meshes;
+    std::string           _directory;
+    std::vector<Texture> _loaded_textures;
 
     void LoadModel                            (const std::string &model_path);
     void ProcessNode                          (const aiNode *node, const aiScene *scene);

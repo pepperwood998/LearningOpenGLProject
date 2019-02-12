@@ -20,6 +20,7 @@ struct Texture
 {
     GLuint      _id;
     std::string _type_name;
+    std::string _file_name;
 };
 
 class Mesh

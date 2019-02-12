@@ -85,10 +85,19 @@ int main (int argc, char const *argv[])
     model      = glm::scale      (model, glm::vec3(0.2f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
+    glm::mat4 normal_mat = glm::mat4(1.0f);
+
+    normal_mat = glm::transpose(glm::inverse(model));
+
     // Object-shader's uniforms setting
     shader.Use    ();
     shader.SetMat4("model",      model);
     shader.SetMat4("projection", projection);
+
+    shader.SetVec3("dir_light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+    shader.SetVec3("dir_light.ambient",   glm::vec3( 0.5f,  0.5f,  0.5f));
+    shader.SetVec3("dir_light.diffuse",   glm::vec3( 0.5f,  0.5f,  0.5f));
+    shader.SetVec3("dir_light.specular",  glm::vec3( 1.0f,  1.0f,  1.0f));
 
     // Game loop
     // --------------------
@@ -108,6 +117,7 @@ int main (int argc, char const *argv[])
 
         shader.Use    ();
         shader.SetMat4("view", view);
+        shader.SetVec3("view_pos", camera.GetPos());
         
         nanosuit.Draw(shader);
 

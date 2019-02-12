@@ -55,7 +55,8 @@ void Mesh::Draw (Shader shader)
 
         shader.SetInt(("material." + tex_type + tex_type_num).c_str(), i);
     }
-
+    shader.SetFloat("material.shininess", 32.0f);
+    
     glBindVertexArray(_VAO);
     glDrawElements   (GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);

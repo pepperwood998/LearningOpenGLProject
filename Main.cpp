@@ -25,14 +25,20 @@ float is_focused   = false;
 float delta_time      = 0.0f;
 float last_frame_time = 0.0f;
 
-// process inputs coming to "window"
+/**
+ *  process inputs coming to "window"
+ */
 void ProcessInput (GLFWwindow *window);
 
 // Callback Functions
 // --------------------
-// Mouse movement callback
+/**
+ *  Mouse movement callback
+ */
 void cb_MouseMove (GLFWwindow *window, double pos_x, double pos_y);
-// Event Callback
+/**
+ *  Window resize callback
+ */
 void cb_FramebufferSize (GLFWwindow *window, int width, int height);
 
 int main (int argc, char const *argv[])
@@ -67,20 +73,20 @@ int main (int argc, char const *argv[])
     glEnable(GL_DEPTH_TEST);
     glfwSetFramebufferSizeCallback(window, cb_FramebufferSize);
 
-    Shader shader ("res/shader/shader.vs", "res/shader/shader.fs");
-
     // One-time-set variables
     // --------------------
-    Model nanosuit = Model("res/model/nanosuit/nanosuit.obj");
+    Shader shader  = Shader("res/shader/shader.vs", "res/shader/shader.fs");
+    Model nanosuit = Model ("res/model/nanosuit/nanosuit.obj");
 
     glm::mat4 model      = glm::mat4(1.0f);
     glm::mat4 view       = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
 
-    model      = glm::scale(model, glm::vec3(0.2f));
+    model      = glm::scale      (model, glm::vec3(0.2f));
     projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+
     // Object-shader's uniforms setting
-    shader.Use();
+    shader.Use    ();
     shader.SetMat4("model",      model);
     shader.SetMat4("projection", projection);
 
@@ -100,13 +106,13 @@ int main (int argc, char const *argv[])
 
         view = camera.GetViewMatrix();
 
-        shader.Use();
+        shader.Use    ();
         shader.SetMat4("view", view);
         
         nanosuit.Draw(shader);
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwPollEvents ();
     }
 
     // Clean up

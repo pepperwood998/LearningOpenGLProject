@@ -6,6 +6,10 @@
 #include "Log.hpp"
 
 // Helper function declaration
+// --------------------
+/**
+ * create new texture data, and return its ID
+ */
 GLuint GenTextureFromFile (const char *tex_file_name, const std::string &directory);
 
 void Model::Draw (Shader shader)
@@ -33,11 +37,10 @@ void Model::LoadModel (const std::string &model_path)
 
 void Model::ProcessNode (const aiNode *node, const aiScene *scene)
 {
-    // process 
     for (unsigned int i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        _meshes.push_back(this->ProcessMesh(mesh, scene));
+        _meshes.push_back(this->GetMesh(mesh, scene));
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; ++i)
@@ -46,7 +49,7 @@ void Model::ProcessNode (const aiNode *node, const aiScene *scene)
     }
 }
 
-Mesh Model::ProcessMesh (const aiMesh *mesh, const aiScene *scene)
+Mesh Model::GetMesh (const aiMesh *mesh, const aiScene *scene)
 {
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
@@ -146,6 +149,7 @@ std::vector<Texture> Model::LoadTextureMaterials (const aiMaterial *material, ai
 }
 
 // Helper function
+// --------------------
 GLuint GenTextureFromFile (const char *tex_file_name, const std::string &directory)
 {
     GLuint texture;

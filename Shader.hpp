@@ -1,5 +1,6 @@
 #ifndef __SHADER_HPP__
 #define __SHADER_HPP__
+
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 

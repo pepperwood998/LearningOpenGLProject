@@ -1,9 +1,9 @@
 #include "Shader.hpp"
-#include "Log.hpp"
-
 #include <fstream>
 #include <sstream>
 #include <string>
+
+#include "Log.hpp"
 
 Shader::Shader (const char *vertex_path, const char *fragment_path)
 {
@@ -36,7 +36,7 @@ Shader::Shader (const char *vertex_path, const char *fragment_path)
 
     GLuint vert_shader = CompileShader(GL_VERTEX_SHADER, vert_src.c_str());
     GLuint frag_shader = CompileShader(GL_FRAGMENT_SHADER, frag_src.c_str());
-    _ID = LinkShaders(vert_shader, frag_shader);
+    _ID                = LinkShaders  (vert_shader, frag_shader);
 }
 
 void Shader::Use ()
@@ -68,7 +68,8 @@ GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
 {
     GLuint shader;
     shader = glCreateShader(shader_type);
-    glShaderSource(shader, 1, &shader_src, NULL);
+
+    glShaderSource (shader, 1, &shader_src, NULL);
     glCompileShader(shader);
 
     // check for compilation errors
@@ -88,10 +89,12 @@ GLuint Shader::LinkShaders (GLuint vertex_shader, GLuint fragment_shader)
 {
     GLuint program;
     program = glCreateProgram();
+
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
+    glLinkProgram (program);
 
+    // check for shaders linking errors
     int success;
     char info_log[512];
     glGetProgramiv(program, GL_LINK_STATUS, &success);

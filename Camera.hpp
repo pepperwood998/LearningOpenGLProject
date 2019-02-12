@@ -1,5 +1,6 @@
 #ifndef __CAMERA_HPP__
 #define __CAMERA_HPP__
+
 #include <glm/gtc/type_ptr.hpp>
 
 enum class CameraDirection

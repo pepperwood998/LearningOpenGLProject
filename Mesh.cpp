@@ -22,11 +22,11 @@ void Mesh::InitMesh ()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * _indices.size(), &_indices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer    (0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _normal));
+    glVertexAttribPointer    (1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _normal));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _tex_coord));
+    glVertexAttribPointer    (2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _tex_coord));
     glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
@@ -40,7 +40,7 @@ void Mesh::Draw (Shader shader)
     for (unsigned int i = 0; i < _textures.size(); ++i)
     {
         glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, _textures[i]._id);
+        glBindTexture  (GL_TEXTURE_2D, _textures[i]._id);
 
         std::string tex_type = _textures[i]._type_name;
         std::string tex_type_num;

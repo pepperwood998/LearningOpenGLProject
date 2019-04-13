@@ -11,6 +11,9 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
+namespace RoadGL
+{
+
 class Model
 {
 private:
@@ -40,5 +43,7 @@ public:
 
     void Draw (Shader shader);
 };
+
+}
 
 #endif // __MODEL_HPP__

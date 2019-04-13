@@ -1,6 +1,6 @@
 #include "Mesh.hpp"
 
-Mesh::Mesh (const std::vector<Vertex>       &vertices,
+RoadGL::Mesh::Mesh (const std::vector<Vertex>       &vertices,
             const std::vector<unsigned int> &indices,
             const std::vector<Texture>      &textures)
     : _vertices(vertices), _indices(indices), _textures(textures)
@@ -8,7 +8,7 @@ Mesh::Mesh (const std::vector<Vertex>       &vertices,
     this->InitMesh();
 }
 
-void Mesh::InitMesh ()
+void RoadGL::Mesh::InitMesh ()
 {
     glGenVertexArrays(1, &_VAO);
     glGenBuffers     (1, &_VBO);
@@ -32,7 +32,7 @@ void Mesh::InitMesh ()
     glBindVertexArray(0);
 }
 
-void Mesh::Draw (Shader shader)
+void RoadGL::Mesh::Draw (Shader shader)
 {
     unsigned int diffuse_num  = 1;
     unsigned int specular_num = 1;

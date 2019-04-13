@@ -13,6 +13,8 @@
 #include "Camera.hpp"
 #include "Model.hpp"
 
+using namespace RoadGL;
+
 const int WIDTH   = 800;
 const int HEIGHT  = 600;
 const char *title = "Learning OpenGL Project";

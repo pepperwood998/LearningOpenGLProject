@@ -4,6 +4,9 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+namespace RoadGL
+{
+
 class Shader
 {
 private:
@@ -22,5 +25,7 @@ public:
     void SetVec3  (const char *name, const glm::vec3 &value);
     void SetMat4  (const char *name, const glm::mat4 &value);
 };
+
+}
 
 #endif // __SHADER_HPP

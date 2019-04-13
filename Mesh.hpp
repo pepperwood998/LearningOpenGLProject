@@ -9,6 +9,9 @@
 
 #include "Shader.hpp"
 
+namespace RoadGL
+{
+
 struct Vertex
 {
     glm::vec3 _position;
@@ -43,5 +46,7 @@ public:
 
     void Draw (Shader shader);
 };
+
+}
 
 #endif // __MESH_HPP__

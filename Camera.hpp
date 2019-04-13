@@ -3,6 +3,9 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+namespace RoadGL
+{
+
 enum class CameraDirection
 {
     FORWARD,
@@ -40,5 +43,7 @@ public:
     void Move (CameraDirection camera_dir, float delta_time);
     void Look (float offset_x, float offset_y);
 };
+
+}
 
 #endif // __CAMERA_HPP__

@@ -4,23 +4,23 @@
 static float pitch = 0.0f;
 static float yaw   = -90.0f;
 
-Camera::Camera (glm::vec3 position, float speed, float sens, glm::vec3 front, glm::vec3 world_up)
+RoadGL::Camera::Camera (glm::vec3 position, float speed, float sens, glm::vec3 front, glm::vec3 world_up)
 : _position(position), _speed(speed), _sens(sens), _front(front), _world_up(world_up)
 {
     this->UpdateCameraVectors();
 }
 
-Camera::~Camera ()
+RoadGL::Camera::~Camera ()
 {
 }
 
-glm::mat4 Camera::GetViewMatrix ()
+glm::mat4 RoadGL::Camera::GetViewMatrix ()
 {
     glm::mat4 view = glm::lookAt(_position, _position + _front, _world_up);
     return view;
 }
 
-void Camera::UpdateCameraVectors ()
+void RoadGL::Camera::UpdateCameraVectors ()
 {
     glm::vec3 front = glm::vec3(0.0f);
     
@@ -32,7 +32,7 @@ void Camera::UpdateCameraVectors ()
     _right = glm::normalize(glm::cross(_front, _world_up));
 }
 
-void Camera::Move (CameraDirection camera_dir, float delta_time)
+void RoadGL::Camera::Move (CameraDirection camera_dir, float delta_time)
 {
     float frame_speed = _speed * delta_time;
 
@@ -55,7 +55,7 @@ void Camera::Move (CameraDirection camera_dir, float delta_time)
     }
 }
 
-void Camera::Look (float offset_x, float offset_y)
+void RoadGL::Camera::Look (float offset_x, float offset_y)
 {
     offset_x *= _sens;
     offset_y *= _sens;

@@ -5,7 +5,7 @@
 
 #include "Log.hpp"
 
-Shader::Shader (const char *vertex_path, const char *fragment_path)
+RoadGL::Shader::Shader (const char *vertex_path, const char *fragment_path)
 {
     std::ifstream vert_file;
     std::ifstream frag_file;
@@ -39,32 +39,32 @@ Shader::Shader (const char *vertex_path, const char *fragment_path)
     _ID                = LinkShaders  (vert_shader, frag_shader);
 }
 
-void Shader::Use ()
+void RoadGL::Shader::Use ()
 {
     glUseProgram(_ID);
 }
 
-void Shader::SetInt (const char *name, const int value)
+void RoadGL::Shader::SetInt (const char *name, const int value)
 {
     glUniform1i(glGetUniformLocation(_ID, name), value);
 }
 
-void Shader::SetFloat (const char *name, const float value)
+void RoadGL::Shader::SetFloat (const char *name, const float value)
 {
     glUniform1f(glGetUniformLocation(_ID, name), value);
 }
 
-void Shader::SetVec3 (const char *name, const glm::vec3 &value)
+void RoadGL::Shader::SetVec3 (const char *name, const glm::vec3 &value)
 {
     glUniform3fv(glGetUniformLocation(_ID, name), 1, &value.r);
 }
 
-void Shader::SetMat4 (const char *name, const glm::mat4 &value)
+void RoadGL::Shader::SetMat4 (const char *name, const glm::mat4 &value)
 {
     glUniformMatrix4fv(glGetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
+GLuint RoadGL::Shader::CompileShader (GLenum shader_type, const char *shader_src)
 {
     GLuint shader;
     shader = glCreateShader(shader_type);
@@ -85,7 +85,7 @@ GLuint Shader::CompileShader (GLenum shader_type, const char *shader_src)
     return shader;
 }
 
-GLuint Shader::LinkShaders (GLuint vertex_shader, GLuint fragment_shader)
+GLuint RoadGL::Shader::LinkShaders (GLuint vertex_shader, GLuint fragment_shader)
 {
     GLuint program;
     program = glCreateProgram();

@@ -12,7 +12,7 @@
  */
 GLuint GenTextureFromFile (const char *tex_file_name, const std::string &directory);
 
-void Model::Draw (Shader shader)
+void RoadGL::Model::Draw (Shader shader)
 {
     for (Mesh mesh : _meshes)
     {
@@ -20,7 +20,7 @@ void Model::Draw (Shader shader)
     }
 }
 
-void Model::LoadModel (const std::string &model_path)
+void RoadGL::Model::LoadModel (const std::string &model_path)
 {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(model_path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -35,7 +35,7 @@ void Model::LoadModel (const std::string &model_path)
     this->ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::ProcessNode (const aiNode *node, const aiScene *scene)
+void RoadGL::Model::ProcessNode (const aiNode *node, const aiScene *scene)
 {
     for (unsigned int i = 0; i < node->mNumMeshes; ++i)
     {
@@ -49,7 +49,7 @@ void Model::ProcessNode (const aiNode *node, const aiScene *scene)
     }
 }
 
-Mesh Model::GetMesh (const aiMesh *mesh, const aiScene *scene)
+RoadGL::Mesh RoadGL::Model::GetMesh (const aiMesh *mesh, const aiScene *scene)
 {
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
@@ -111,7 +111,7 @@ Mesh Model::GetMesh (const aiMesh *mesh, const aiScene *scene)
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Model::LoadTextureMaterials (const aiMaterial *material, aiTextureType texture_type, const char *tex_type_name)
+std::vector<RoadGL::Texture> RoadGL::Model::LoadTextureMaterials (const aiMaterial *material, aiTextureType texture_type, const char *tex_type_name)
 {
     std::vector<Texture> textures;
 

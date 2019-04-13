@@ -28,6 +28,7 @@ target_link_libraries(
     Run PRIVATE
     glfw
     ${ASSIMP_LIBRARIES}
+    ${CMAKE_DL_LIBS}
 )
 
 install(
